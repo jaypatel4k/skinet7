@@ -1,14 +1,12 @@
+using API.RequestHelpers;
 using Core.Entities;
 using Core.Interfaces;
 using Core.Specifications;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace API.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class ProductsController : ControllerBase
+    public class ProductsController : BaseApiController
     {
         
         #region ProductsController()
@@ -49,8 +47,9 @@ namespace API.Controllers
        #endregion
        #nullable enable
        [HttpGet]
-        public async Task<ActionResult<IReadOnlyList<Product>>> GetProducts(string? brand,
-                                                    string? type, string? sort)
+        // public async Task<ActionResult<IReadOnlyList<Product>>> GetProducts(string? brand,
+        //                                             string? type, string? sort)
+        public async Task<ActionResult<IReadOnlyList<Product>>> GetProducts([FromQuery]ProductSpecParams specParams)
         {
             //var products = await _context.Products.ToListAsync();
             //return products; // work with Task<ActionResult<List<Product>>>
@@ -63,9 +62,15 @@ namespace API.Controllers
             // return Ok(products); 
 
             //Below code added for specification Implement
-            var spec = new ProductSpecification(brand,type,sort);
-            var products = await _repo.ListAsync(spec);
-            return Ok(products);
+            //var spec = new ProductSpecification(brand,type,sort);
+            var spec = new ProductSpecification(specParams);
+            // var products = await _repo.ListAsync(spec);
+
+            // var count = await _repo.CountAsync(spec);
+            // var pagination = new Pagination<Product>(specParams.PageIndex,specParams.PageSize,count,products);
+            //return Ok(products);
+            //return Ok(pagination);
+            return await CreatePagedResult(_repo,spec,specParams.PageIndex,specParams.PageSize);
         }
         #nullable disable
 
