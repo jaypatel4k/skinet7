@@ -77,12 +77,13 @@ namespace Core.Specifications
         // }
         //Add without parameter contructor for projection to Spec Part 3
         protected BaseSpecification():this(null!) {}
-
+        #nullable enable
         public Expression<Func<T, TResult>>? Select{get;private set;} 
         public void AddSelect(Expression<Func<T,TResult>> selectExpression)
         {
             Select = selectExpression;
         }
+        #nullable disable
         
     }
 }

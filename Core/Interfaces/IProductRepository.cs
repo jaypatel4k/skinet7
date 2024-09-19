@@ -5,13 +5,16 @@ namespace Core.Interfaces
 {
     public interface IProductRepository
     {
-        Task<Product> GetPoductByIdAsync(int id);
-        //Task<IReadOnlyList<Product>> GetProductsAsync();
-        //Task<List<Product>> GetProductsAsync();
-        #nullable enable
+#nullable enable
         Task<IReadOnlyList<Product>> GetProductsAsync(string? brand, string? type, string? sort);
-        #nullable disable
-        Task<IReadOnlyList<ProductBrand>> GetProductBrandAsync();
-        Task<IReadOnlyList<ProductType>> GetProductTypeAsync();
+    Task<Product?> GetProductByIdAsync(int id);
+    #nullable disable
+    Task<IReadOnlyList<string>> GetBrandsAsync();
+    Task<IReadOnlyList<string>> GetTypesAsync();
+    void AddProduct(Product product);
+    void UpdateProduct(Product product);
+    void DeleteProduct(Product product);
+    bool ProductExists(int id);
+    Task<bool> SaveChangesAsync();
     }
 }
