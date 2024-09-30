@@ -31,7 +31,7 @@ namespace API.Controllers
             throw new Exception("This is a test exception");
         }
         [HttpPost("validationerror")]
-        public IActionResult GetValidationerror(CreateProductDto product)
+        public IActionResult GetValidationError(CreateProductDto product)
         {
             return Ok();
         }
