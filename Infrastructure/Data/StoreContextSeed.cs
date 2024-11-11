@@ -32,10 +32,23 @@ namespace Infrastructure.Data
                 var productsData = File.ReadAllText("../Infrastructure/Data/SeedData/products.json");
                 var products = JsonSerializer.Deserialize<List<Product>>(productsData);
                 //await context.Database.ExecuteSqlRawAsync($"SET IDENTITY_INSERT [Products] ON");
+                if (products == null) return;
                 context.Products.AddRange(products);
+                await context.SaveChangesAsync();
             }
 
-            if(context.ChangeTracker.HasChanges()) await context.SaveChangesAsync();
+            if (!context.DeliveryMethods.Any())
+            {
+                var dmData = await File
+                    .ReadAllTextAsync("../Infrastructure/Data/SeedData/delivery.json");
+
+                var methods = JsonSerializer.Deserialize<List<DeliveryMethod>>(dmData);
+                if (methods == null) return;
+                context.DeliveryMethods.AddRange(methods);
+                await context.SaveChangesAsync();
+            }
+            //if(context.ChangeTracker.HasChanges()) await context.SaveChangesAsync();
+
            // await context.Database.ExecuteSqlRawAsync($"SET IDENTITY_INSERT [ProductBrands] OFF");
             // await context.Database.ExecuteSqlRawAsync($"SET IDENTITY_INSERT [ProductTypes] OFF");
             // await context.Database.ExecuteSqlRawAsync($"SET IDENTITY_INSERT [Products] OFF");
